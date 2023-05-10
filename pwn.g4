@@ -44,7 +44,7 @@ forStatement
     : FOR LPAR ID COLON type IN iterable RPAR LBRACE loopStatement* RBRACE
     ;
  
- functionDefinition
+functionDefinition
     : FN ID LPAR argumentsDefinition RPAR (ARROW type)? LBRACE statement* RBRACE
     ;
 
