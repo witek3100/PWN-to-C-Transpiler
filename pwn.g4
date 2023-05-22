@@ -17,23 +17,23 @@ loopStatement
     ;
 
 declaration
-    : ID type ASSIGN expression SEMICOLON 
+    : ID COLON type ASSIGN expression SEMICOLON 
     ;
 
 assignment
-    : ID (ASSIGN | ADDASSIGN | SUBASSIGN) expression | ID (INCREMENT | DECREMENT) SEMICOLON
+    : ID ((ASSIGN | ADDASSIGN | SUBASSIGN) expression) | (INCREMENT | DECREMENT) SEMICOLON
     ;
 
 returnStatement
-    : RETURN expression SEMICOLON 
+    : RETURN expression? SEMICOLON 
     ;
 
 ifStatement
-    : IF LPAR expression RPAR LBRACE loopStatement* RBRACE (ELIF LPAR expression RPAR LBRACE loopStatement* RBRACE)* (ELSE LBRACE loopStatement* RBRACE)?
+    : IF LPAR logicalExpression RPAR LBRACE statement* RBRACE (ELIF LPAR logicalExpression RPAR LBRACE statement* RBRACE)* (ELSE LBRACE statement* RBRACE)?
     ;
 
 whileStatement
-    : WHILE LPAR expression RPAR LBRACE statement* RBRACE
+    : WHILE LPAR logicalExpression RPAR LBRACE loopStatement* RBRACE
     ;
 
 iterable
@@ -57,11 +57,23 @@ arguments
     ;
 
 functionCall
-    : ID LPAR arguments RPAR SEMICOLON
+    : ID LPAR arguments RPAR
     ;
 
 type
-    : (KW_INT | KW_FLOAT | KW_DOUBLE | KW_STRING | KW_BOOL) (LBRACKET RBRACKET)?
+    : normalType | arrayType
+    ;
+
+normalType
+    : KW_INT | KW_FLOAT | KW_DOUBLE | KW_STRING | KW_BOOL
+    ;
+
+arrayType
+    : normalType LBRACKET RBRACKET
+    ;
+
+array
+    : normalType LBRACKET [0-9]+ RBRACKET
     ;
 
 expression
@@ -69,7 +81,7 @@ expression
     ;
 
 logicalExpression
-    : ( NOT logicalExpression ) | ( logicalExpression ( AND | OR ) logicalExpression  ) | ( operationExpression ( LT | GT | LE | GE | EQ | NEQ ) operationExpression ) | ( operationExpression IN iterable ) | ( LPAR logicalExpression RPAR ) | logicalValue
+    : ( NOT logicalExpression ) | ( logicalExpression ( AND | OR ) logicalExpression ) | ( operationExpression ( LT | GT | LE | GE | EQ | NEQ ) operationExpression ) | ( operationExpression IN iterable ) | ( LPAR logicalExpression RPAR ) | logicalValue
     ;
 
 operationExpression
@@ -77,7 +89,7 @@ operationExpression
     ;
 
 value
-    : ID | INT | FLOAT | STRING | RANGE | NULL | functionCall | ( LPAR value RPAR )
+    : ID | INT | FLOAT | STRING | RANGE | ARRAY | NULL | functionCall | ( LPAR value RPAR )
     ;
 
 logicalValue
@@ -89,15 +101,15 @@ logicalValue
 
 
 ID 
-    : [A-Za-z0-9]+
+    : [a-zA-Z_][a-zA-Z0-9_]*
     ;
 
 INT
-    : ('-' | '0x' | '0b')? [0-9]+
+    : ('-'|'0x'|'0b')?[0-9]+
     ;
 
 FLOAT 
-    : '-'? [0-9]+ '.' [0-9]*
+    : '-'?[0-9]+'.'[0-9]*
     ;
 
 RANGE 
@@ -105,7 +117,7 @@ RANGE
     ;
 
 STRING
-    : [a-zA-Z]+[a-zA-Z0-9]*
+    : '"'.*'"'
     ;
 
 ADD : '+' ;
@@ -117,6 +129,8 @@ MUL : '*' ;
 SUB : '-' ;
 
 SEMICOLON : ';' ;
+
+COLON : ':' ;
 
 LPAR : '(' ;
 
@@ -140,7 +154,7 @@ BREAK : 'break' ;
 
 CONTINUE : 'continue' ;
 
-ARROW : '→' ;
+ARROW : '->' ;
 
 COMMA : ',' ;
 
