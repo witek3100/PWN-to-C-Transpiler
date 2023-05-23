@@ -53,7 +53,7 @@ argumentsDefinition
     ;
 
 arguments
-    : (ID(COMMA ID)*)?
+    : (expression (COMMA expression)*)?
     ;
 
 functionCall
@@ -73,7 +73,7 @@ arrayType
     ;
 
 array
-    : normalType LBRACKET [0-9]+ RBRACKET
+    : normalType LBRACKET INDEX RBRACKET
     ;
 
 expression
@@ -85,15 +85,19 @@ logicalExpression
     ;
 
 operationExpression
-    : ( expression (ADD | SUB | MUL | DIV) expression ) | ( LPAR operationExpression RPAR ) | value
+    : ( logicalExpression (ADD | SUB | MUL | DIV) logicalExpression ) | ( LPAR operationExpression RPAR ) | value
+    ;
+
+variableValue
+    : ID | ( ID LBRACKET INDEX RBRACKET )
     ;
 
 value
-    : ID | INT | FLOAT | STRING | RANGE | ARRAY | NULL | functionCall | ( LPAR value RPAR )
+    : variableValue | array | INT | FLOAT | STRING | RANGE | NULL | functionCall | ( LPAR value RPAR )
     ;
 
 logicalValue
-    : ID | TRUE | FALSE | ( LPAR logicalValue RPAR )
+    : variableValue | TRUE | FALSE | ( LPAR logicalValue RPAR )
     ;
 
 
@@ -108,6 +112,10 @@ INT
     : ('-'|'0x'|'0b')?[0-9]+
     ;
 
+INDEX
+    : [0-9]+
+    ;
+
 FLOAT 
     : '-'?[0-9]+'.'[0-9]*
     ;
@@ -117,7 +125,7 @@ RANGE
     ;
 
 STRING
-    : '"'.*'"'
+    : '"'[^"]*'"'
     ;
 
 ADD : '+' ;
@@ -186,7 +194,7 @@ LE : '<=' ;
 
 ASSEMBLY : 'asm' ;
 
-NO : '!' ;
+NOT : '!' ;
 
 OR : 'or' ;
 
@@ -202,6 +210,8 @@ IN : 'in' ;
 
 IF : 'if' ;
 
+ELIF : 'elif' ;
+
 ELSE : 'else' ;
 
 WHILE : 'while' ;
@@ -209,3 +219,7 @@ WHILE : 'while' ;
 FOR : 'for' ;
 
 FN : 'func' ;
+
+RETURN : 'return' ;
+
+WS : [ \t\n\r]+ -> skip ;
