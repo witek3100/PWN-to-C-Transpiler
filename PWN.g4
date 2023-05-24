@@ -76,16 +76,40 @@ array
     : normalType LBRACKET INDEX RBRACKET
     ;
 
+//expression
+//    : value                                      #valueExpression
+//    | LPAR expression RPAR                       #parenthesizedExpression
+//    | (NOT | SUB) expression                     #unaryExpression
+//    | expression (MUL | DIV | MOD) expression    #multiplicativeExpression
+//    | expression (ADD | SUB) expression          #additiveExpression
+//    | expression (LT | GT | LE | GE) expression  #comparisonExpression
+//    | expression (EQ | NEQ) expression           #equalityExpression
+//    | expression IN iterable                     #inExpression
+//    | expression AND expression                  #andExpression
+//    | expression OR expression                   #orExpression
+//    ;
+
 expression
     : logicalExpression | operationExpression
     ;
 
 logicalExpression
-    : ( NOT logicalExpression ) | ( logicalExpression ( AND | OR ) logicalExpression ) | ( operationExpression ( LT | GT | LE | GE | EQ | NEQ ) operationExpression ) | ( operationExpression IN iterable ) | ( LPAR logicalExpression RPAR ) | logicalValue
+    : logicalValue                                                 #logicalValueExpression
+    | LPAR logicalExpression RPAR                                  #logicalParenthesizedLExpression
+    | NOT logicalExpression                                        #notExpression
+    | operationExpression (LT | GT | LE | GE) operationExpression  #comparisonExpression
+    | operationExpression (EQ | NEQ) operationExpression           #equalityExpression
+    | operationExpression IN iterable                              #inExpression
+    | logicalExpression AND logicalExpression                      #andExpression
+    | logicalExpression OR logicalExpression                       #orExpression
     ;
 
 operationExpression
-    : ( logicalExpression (ADD | SUB | MUL | DIV) logicalExpression ) | ( LPAR operationExpression RPAR ) | value
+    : value                                                      #valueExpression
+    | LPAR operationExpression RPAR                              #parenthesizedExpression
+    | SUB operationExpression                                    #subExpression
+    | operationExpression (MUL | DIV | MOD) operationExpression  #multiplicativeExpression
+    | operationExpression (ADD | SUB) operationExpression        #additiveExpression
     ;
 
 variableValue
@@ -101,38 +125,13 @@ logicalValue
     ;
 
 
-
-
-
-ID 
-    : [a-zA-Z_][a-zA-Z0-9_]*
-    ;
-
-INT
-    : ('-'|'0x'|'0b')?[0-9]+
-    ;
-
-INDEX
-    : [0-9]+
-    ;
-
-FLOAT 
-    : '-'?[0-9]+'.'[0-9]*
-    ;
-
-RANGE 
-    : [0-9]+'..'[0-9]+ 
-    ;
-
-STRING
-    : '"'[^"]*'"'
-    ;
-
 ADD : '+' ;
 
 DIV : '/' ;
 
 MUL : '*' ;
+
+MOD : '%' ;
 
 SUB : '-' ;
 
@@ -221,5 +220,33 @@ FOR : 'for' ;
 FN : 'func' ;
 
 RETURN : 'return' ;
+
+ID
+    : [a-zA-Z_][a-zA-Z0-9_]*
+    ;
+
+INT
+    : ('0x'|'0b')?[0-9]+
+    ;
+
+INDEX
+    : [0-9]+
+    ;
+
+FLOAT
+    : [0-9]+'.'[0-9]*
+    ;
+
+RANGE
+    : [0-9]+'..'[0-9]+
+    ;
+
+STRING
+    : UNTERMINATED_STRING '"'
+    ;
+
+UNTERMINATED_STRING
+    : '"' (~["\\\r\n] | '\\' (. | EOF))*
+    ;
 
 WS : [ \t\n\r]+ -> skip ;
