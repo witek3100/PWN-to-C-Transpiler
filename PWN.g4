@@ -9,7 +9,14 @@ program
     ;
 
 statement 
-    : functionDefinition | assignment | declaration | returnStatement | ifStatement | whileStatement | forStatement 
+    : functionDefinition
+    | assignment
+    | increment
+    | declaration
+    | returnStatement
+    | ifStatement
+    | whileStatement
+    | forStatement
     ;
 
 loopStatement
@@ -21,7 +28,15 @@ declaration
     ;
 
 assignment
-    : ID ((ASSIGN | ADDASSIGN | SUBASSIGN) expression) | (INCREMENT | DECREMENT) SEMICOLON
+    : variableValue (ASSIGN | ADDASSIGN | SUBASSIGN) expression SEMICOLON
+    ;
+
+increment
+    : variableValue (INCREMENT | DECREMENT) SEMICOLON
+    ;
+
+index
+    : LBRACKET expression RBRACKET
     ;
 
 returnStatement
@@ -72,8 +87,8 @@ arrayType
     : normalType LBRACKET RBRACKET
     ;
 
-array
-    : normalType LBRACKET INDEX RBRACKET
+arrayInit
+    : normalType LBRACKET INT RBRACKET
     ;
 
 //expression
@@ -113,11 +128,11 @@ operationExpression
     ;
 
 variableValue
-    : ID | ( ID LBRACKET INDEX RBRACKET )
+    : ID index?
     ;
 
 value
-    : variableValue | array | INT | FLOAT | STRING | RANGE | NULL | functionCall | ( LPAR value RPAR )
+    : variableValue | arrayInit | INT | FLOAT | STRING | RANGE | NULL | functionCall | ( LPAR value RPAR )
     ;
 
 logicalValue
@@ -227,10 +242,6 @@ ID
 
 INT
     : ('0x'|'0b')?[0-9]+
-    ;
-
-INDEX
-    : [0-9]+
     ;
 
 FLOAT
