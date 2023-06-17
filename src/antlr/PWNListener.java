@@ -1,6 +1,5 @@
-// Generated from E:/Next/School/Studia/Kompilatory/TK-projekt/PWNConverter/src/antlr\PWN.g4 by ANTLR 4.12.0
+// Generated from E:/Next/School/Studia/Kompilatory/TK-projekt/src/antlr\PWN.g4 by ANTLR 4.12.0
 package antlr;
-
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -68,6 +67,16 @@ public interface PWNListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitDeclaration(PWNParser.DeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PWNParser#arrayDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayDeclaration(PWNParser.ArrayDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PWNParser#arrayDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayDeclaration(PWNParser.ArrayDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PWNParser#assignment}.
 	 * @param ctx the parse tree
@@ -138,6 +147,26 @@ public interface PWNListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIfStatement(PWNParser.IfStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PWNParser#elifStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterElifStatement(PWNParser.ElifStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PWNParser#elifStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitElifStatement(PWNParser.ElifStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PWNParser#elseStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseStatement(PWNParser.ElseStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PWNParser#elseStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseStatement(PWNParser.ElseStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PWNParser#whileStatement}.
 	 * @param ctx the parse tree
@@ -238,16 +267,6 @@ public interface PWNListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitArrayType(PWNParser.ArrayTypeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link PWNParser#arrayInit}.
-	 * @param ctx the parse tree
-	 */
-	void enterArrayInit(PWNParser.ArrayInitContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link PWNParser#arrayInit}.
-	 * @param ctx the parse tree
-	 */
-	void exitArrayInit(PWNParser.ArrayInitContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code orExpression}
 	 * labeled alternative in {@link PWNParser#expression}.
@@ -388,6 +407,16 @@ public interface PWNListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitValue(PWNParser.ValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link PWNParser#arrayLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterArrayLiteral(PWNParser.ArrayLiteralContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link PWNParser#arrayLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitArrayLiteral(PWNParser.ArrayLiteralContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link PWNParser#literalValue}.
 	 * @param ctx the parse tree

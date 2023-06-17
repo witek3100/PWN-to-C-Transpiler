@@ -1,6 +1,5 @@
-// Generated from E:/Next/School/Studia/Kompilatory/TK-projekt/PWNConverter/src/antlr\PWN.g4 by ANTLR 4.12.0
+// Generated from E:/Next/School/Studia/Kompilatory/TK-projekt/src/antlr\PWN.g4 by ANTLR 4.12.0
 package antlr;
-
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -90,6 +89,18 @@ public class PWNBaseListener implements PWNListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterArrayDeclaration(PWNParser.ArrayDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrayDeclaration(PWNParser.ArrayDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAssignment(PWNParser.AssignmentContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -169,6 +180,30 @@ public class PWNBaseListener implements PWNListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitIfStatement(PWNParser.IfStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElifStatement(PWNParser.ElifStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElifStatement(PWNParser.ElifStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterElseStatement(PWNParser.ElseStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitElseStatement(PWNParser.ElseStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -289,18 +324,6 @@ public class PWNBaseListener implements PWNListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitArrayType(PWNParser.ArrayTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterArrayInit(PWNParser.ArrayInitContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitArrayInit(PWNParser.ArrayInitContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -445,6 +468,18 @@ public class PWNBaseListener implements PWNListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitValue(PWNParser.ValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterArrayLiteral(PWNParser.ArrayLiteralContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitArrayLiteral(PWNParser.ArrayLiteralContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

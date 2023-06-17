@@ -1,6 +1,5 @@
-// Generated from E:/Next/School/Studia/Kompilatory/TK-projekt/PWNConverter/src/antlr\PWN.g4 by ANTLR 4.12.0
+// Generated from E:/Next/School/Studia/Kompilatory/TK-projekt/src/antlr\PWN.g4 by ANTLR 4.12.0
 package antlr;
-
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -48,6 +47,12 @@ public interface PWNVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitDeclaration(PWNParser.DeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PWNParser#arrayDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayDeclaration(PWNParser.ArrayDeclarationContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PWNParser#assignment}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -89,6 +94,18 @@ public interface PWNVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIfStatement(PWNParser.IfStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PWNParser#elifStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElifStatement(PWNParser.ElifStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PWNParser#elseStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseStatement(PWNParser.ElseStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PWNParser#whileStatement}.
 	 * @param ctx the parse tree
@@ -149,12 +166,6 @@ public interface PWNVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitArrayType(PWNParser.ArrayTypeContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link PWNParser#arrayInit}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitArrayInit(PWNParser.ArrayInitContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code orExpression}
 	 * labeled alternative in {@link PWNParser#expression}.
@@ -237,6 +248,12 @@ public interface PWNVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitValue(PWNParser.ValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PWNParser#arrayLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayLiteral(PWNParser.ArrayLiteralContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PWNParser#literalValue}.
 	 * @param ctx the parse tree

@@ -1,9 +1,5 @@
 grammar PWN;
 
-@header {
-    package antlr;
-}
-
 program 
     : functionDefinition* statement+ EOF
     ;
@@ -12,6 +8,7 @@ statement
     : assignment
     | increment
     | declaration
+    | arrayDeclaration
     | returnStatement
     | ifStatement
     | whileStatement
@@ -32,6 +29,10 @@ jumpStatementType
 
 declaration
     : ID COLON type ASSIGN expression SEMICOLON 
+    ;
+
+arrayDeclaration
+    : ID COLON normalType LBRACKET INT RBRACKET SEMICOLON
     ;
 
 assignment
@@ -59,7 +60,15 @@ returnStatement
     ;
 
 ifStatement
-    : IF LPAR expression RPAR LBRACE statement* RBRACE (ELIF LPAR expression RPAR LBRACE statement* RBRACE)* (ELSE LBRACE statement* RBRACE)?
+    : IF LPAR expression RPAR LBRACE statement* RBRACE elifStatement* elseStatement?
+    ;
+
+elifStatement
+    : ELIF LPAR expression RPAR LBRACE statement* RBRACE
+    ;
+
+elseStatement
+    : ELSE LBRACE statement* RBRACE
     ;
 
 whileStatement
@@ -75,7 +84,7 @@ forStatement
     ;
 
 functionDefinition
-    : FN ID LPAR argumentsDefinition RPAR (ARROW type)? LBRACE statement* RBRACE
+    : FN ID LPAR argumentsDefinition RPAR (ARROW normalType)? LBRACE statement* RBRACE
     ;
 
 argumentsDefinition
@@ -102,10 +111,6 @@ arrayType
     : normalType LBRACKET RBRACKET
     ;
 
-arrayInit
-    : normalType LBRACKET INT RBRACKET
-    ;
-
 expression
     : value                                      #valueExpression
     | LPAR expression RPAR                       #parenthesizedExpression
@@ -124,7 +129,11 @@ variableValue
     ;
 
 value
-    : variableValue | arrayInit | literalValue | functionCall | ( LPAR value RPAR )
+    : variableValue | literalValue | arrayLiteral | functionCall | ( LPAR value RPAR )
+    ;
+
+arrayLiteral
+    : LBRACKET (expression (COMMA expression)*)? RBRACKET
     ;
 
 literalValue
@@ -233,7 +242,7 @@ ID
     ;
 
 INT
-    : ('0x'|'0b')?[0-9]+
+    : [0-9]+ | '0x'[0-9a-fA-F]+ | '0b'[01]+
     ;
 
 FLOAT

@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        PWNParser parser = getParser("examples/simple.pwn");
+        PWNParser parser = getParser("examples/example2.pwn");
 
         ParseTree tree = parser.program();
 

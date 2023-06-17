@@ -1,6 +1,5 @@
 import antlr.PWNBaseVisitor;
 import antlr.PWNParser;
-import org.stringtemplate.v4.ST;
 
 import java.util.Map;
 
@@ -43,6 +42,8 @@ public class PWNConverter extends PWNBaseVisitor<String> {
             return visitIncrement(ctx.increment());
         } else if (ctx.declaration() != null) {
             return visitDeclaration(ctx.declaration());
+        } else if (ctx.arrayDeclaration() != null) {
+            return visitArrayDeclaration(ctx.arrayDeclaration());
         } else if (ctx.returnStatement() != null) {
             return visitReturnStatement(ctx.returnStatement());
         } else if (ctx.ifStatement() != null) {
@@ -54,6 +55,30 @@ public class PWNConverter extends PWNBaseVisitor<String> {
         } else {
             throw new IllegalArgumentException("Unsupported statement: " + ctx.getText());
         }
+    }
+
+    @Override
+    public String visitArrayDeclaration(PWNParser.ArrayDeclarationContext ctx) {
+        String type = typesMap.get(ctx.normalType().getText());
+        String id = ctx.ID().getText();
+        String size = ctx.INT().getText();
+        return String.format("%s %s[%s];\n", type, id, size);
+    }
+
+    @Override
+    public String visitArrayLiteral(PWNParser.ArrayLiteralContext ctx) {
+        StringBuilder array = new StringBuilder();
+        array.append("{");
+
+        int argsCount = ctx.expression().size();
+        for (int i = 0; i < argsCount; i++) {
+            array.append(visitExpression(ctx.expression(i)));
+            if (i != argsCount - 1)
+                array.append(", ");
+        }
+
+        array.append("}");
+        return array.toString();
     }
 
     @Override
@@ -104,7 +129,9 @@ public class PWNConverter extends PWNBaseVisitor<String> {
         String type = ctx.type().getText();
         boolean isArrayType = type.contains("[]");
         if (isArrayType)
-            type = typesMap.get(type.substring(0, type.length() - 2));
+            type = type.substring(0, type.length() - 2);
+
+        type = typesMap.get(type);
 
         String expression = visitExpression(ctx.expression());
 
@@ -143,7 +170,52 @@ public class PWNConverter extends PWNBaseVisitor<String> {
 
     @Override
     public String visitIfStatement(PWNParser.IfStatementContext ctx) {
-        return super.visitIfStatement(ctx);  // TODO: do this
+        StringBuilder ifStatement = new StringBuilder();
+        ifStatement.append("if (").append(visitExpression(ctx.expression())).append(") {\n");
+        indentation++;
+        for (PWNParser.StatementContext statement : ctx.statement()) {
+            ifStatement.append("    ".repeat(indentation)).append(visitStatement(statement));
+        }
+        indentation--;
+        ifStatement.append("    ".repeat(indentation)).append("}");
+
+        for (PWNParser.ElifStatementContext elif : ctx.elifStatement()) {
+            ifStatement.append(visitElifStatement(elif));
+        }
+
+        if (ctx.elseStatement() != null)
+            ifStatement.append(visitElseStatement(ctx.elseStatement()));
+
+        ifStatement.append("\n");
+        return ifStatement.toString();
+    }
+
+    @Override
+    public String visitElifStatement(PWNParser.ElifStatementContext ctx) {
+        StringBuilder elifStatement = new StringBuilder();
+        elifStatement.append(" else if (").append(visitExpression(ctx.expression())).append(") {\n");
+        indentation++;
+        for (PWNParser.StatementContext statement : ctx.statement()) {
+            elifStatement.append("    ".repeat(indentation)).append(visitStatement(statement));
+        }
+        indentation--;
+        elifStatement.append("    ".repeat(indentation)).append("}");
+
+        return elifStatement.toString();
+    }
+
+    @Override
+    public String visitElseStatement(PWNParser.ElseStatementContext ctx) {
+        StringBuilder elseStatement = new StringBuilder();
+        elseStatement.append(" else {\n");
+        indentation++;
+        for (PWNParser.StatementContext statement : ctx.statement()) {
+            elseStatement.append("    ".repeat(indentation)).append(visitStatement(statement));
+        }
+        indentation--;
+        elseStatement.append("    ".repeat(indentation)).append("}");
+
+        return elseStatement.toString();
     }
 
     @Override
@@ -171,22 +243,73 @@ public class PWNConverter extends PWNBaseVisitor<String> {
 
     @Override
     public String visitFunctionDefinition(PWNParser.FunctionDefinitionContext ctx) {
-        return super.visitFunctionDefinition(ctx);  // TODO: do this
+        StringBuilder function = new StringBuilder();
+
+        String type;
+        if (ctx.normalType() == null)
+            type = "void";
+        else
+            type = typesMap.get(ctx.normalType().getText());
+
+        String name = ctx.ID().getText();
+        String argumentsDefinition = visitArgumentsDefinition(ctx.argumentsDefinition());
+
+        function.append(String.format("%s %s(%s) {\n", type, name, argumentsDefinition));
+
+        for (PWNParser.StatementContext statement : ctx.statement())
+            function.append("    ".repeat(indentation)).append(visitStatement(statement));
+
+        function.append("}\n");
+
+        return function.toString();
     }
 
     @Override
     public String visitArgumentsDefinition(PWNParser.ArgumentsDefinitionContext ctx) {
-        return super.visitArgumentsDefinition(ctx);  // TODO: do this
+        StringBuilder arguments = new StringBuilder();
+        int argsCount = ctx.ID().size();
+
+        for (int i = 0; i < argsCount; i++) {
+            String id = ctx.ID(i).getText();
+            String type = ctx.type(i).getText();
+            boolean isArrayType = type.contains("[]");
+            if (isArrayType)
+                type = type.substring(0, type.length() - 2);
+
+            type = typesMap.get(type);
+
+            arguments.append(type).append(" ").append(id);
+            if (isArrayType)
+                arguments.append("[]");
+
+            if (i != argsCount - 1)
+                arguments.append(", ");
+        }
+
+        return arguments.toString();
     }
 
     @Override
     public String visitArguments(PWNParser.ArgumentsContext ctx) {
-        return super.visitArguments(ctx);  // TODO: do this
+        StringBuilder arguments = new StringBuilder();
+
+        int argsCount = ctx.expression().size();
+
+        for (int i = 0; i < argsCount; i++) {
+            arguments.append(visitExpression(ctx.expression(i)));
+            if (i != argsCount - 1)
+                arguments.append(", ");
+        }
+
+        return arguments.toString();
     }
 
     @Override
     public String visitFunctionCall(PWNParser.FunctionCallContext ctx) {
-        return super.visitFunctionCall(ctx);  // TODO: do this
+        String id = ctx.ID().getText();
+        String arguments = visitArguments(ctx.arguments());
+
+        return String.format("%s(%s)", id, arguments);
     }
 
     @Override
@@ -195,18 +318,8 @@ public class PWNConverter extends PWNBaseVisitor<String> {
     }
 
     @Override
-    public String visitNormalType(PWNParser.NormalTypeContext ctx) {
-        return super.visitNormalType(ctx);  // TODO: do this
-    }
-
-    @Override
     public String visitArrayType(PWNParser.ArrayTypeContext ctx) {
         return super.visitArrayType(ctx);  // TODO: do this
-    }
-
-    @Override
-    public String visitArrayInit(PWNParser.ArrayInitContext ctx) {
-        return super.visitArrayInit(ctx);  // TODO: do this
     }
 
     @Override
@@ -296,8 +409,8 @@ public class PWNConverter extends PWNBaseVisitor<String> {
     public String visitValue(PWNParser.ValueContext ctx) {
         if (ctx.variableValue() != null) {
             return visitVariableValue(ctx.variableValue());
-        } else if (ctx.arrayInit() != null) {
-            return visitArrayInit(ctx.arrayInit());
+        } else if (ctx.arrayLiteral() != null) {
+            return visitArrayLiteral(ctx.arrayLiteral());
         } else if (ctx.literalValue() != null) {
             return visitLiteralValue(ctx.literalValue());
         } else if (ctx.functionCall() != null) {
