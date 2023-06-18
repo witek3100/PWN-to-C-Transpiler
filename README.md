@@ -20,3 +20,21 @@ while ((i and j) or (j and i)) {
 }
 ```
 ### Project structure
+<pre>
+    src
+     ├── antlr
+     |     ├── PWN.g4                        # PWN language grammar
+     |     ├── PNW.interp
+     |     ├── PWN.tokens                    
+     |     ├── PWNBaseListener.java
+     |     ├── PWNBaseVisitor.java
+     |     ├── PWNLexer.interp
+     |     ├── PWNLexer.java
+     |     ├── PWNLexer.tokens
+     |     ├── PWNListener.java
+     |     ├── PWNParser.java
+     |     ├── PWNVisitor.java
+     |     └── antlr-4.12.0-complete.jar    # antlr java archive
+     ├── Main.java                          # gui
+     ├── PWNCoverter.java                   
+</pre>
