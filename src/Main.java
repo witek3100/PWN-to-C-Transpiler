@@ -6,9 +6,11 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,7 +21,7 @@ public class Main implements ActionListener {
     JFileChooser fc;
     JButton loadFileButton, transpileButton;
     JFrame mainFrame;
-    JTextArea pwnInputArea, cOutputArea;
+    JTextArea pwnInputArea, cOutputArea, errorArea;
 
 
     public static void main(String[] args) {
@@ -46,11 +48,11 @@ public class Main implements ActionListener {
             mainFrame = new JFrame("Transpiler PWN to C");
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             mainFrame.setLayout(new BorderLayout());
+            mainFrame.setPreferredSize(new Dimension(1300, 900));
             mainFrame.add(new Gui());
             mainFrame.pack();
             mainFrame.setLocationRelativeTo(null);
             mainFrame.setVisible(true);
-            mainFrame.setResizable(false);
         });
     }
 
@@ -74,12 +76,14 @@ public class Main implements ActionListener {
             gbc.fill = GridBagConstraints.HORIZONTAL;
             pwnInputArea = new JTextArea("Put your PWN code here",30, 40);
             pwnInputArea.setLineWrap(true);
+            pwnInputArea.setBorder(new RoundBorder(20));
             pwnInputArea.setWrapStyleWord(true);
             add(pwnInputArea, gbc);
 
             gbc.gridx++;
             cOutputArea= new JTextArea("C output will be shown here",30, 40);
             cOutputArea.setEditable(false);
+            cOutputArea.setBorder(new RoundBorder(20));
             add(cOutputArea, gbc);
 
             gbc.gridx = 0;
@@ -87,9 +91,46 @@ public class Main implements ActionListener {
             gbc.fill = GridBagConstraints.NONE;
             gbc.gridwidth = 2;
 
+            errorArea = new JTextArea("...",5, 40);
+            errorArea.setBorder(new RoundBorder(20));
+            add(errorArea, gbc);
+
+            gbc.gridy++;
             add(loadFileButton, gbc);
+
             gbc.gridy++;
             add(transpileButton, gbc);
+        }
+
+        public class RoundBorder implements Border {
+
+            private int radius;
+
+            public RoundBorder(int radius) {
+                this.radius = radius;
+            }
+
+            public int getRadius() {
+                return radius;
+            }
+
+            @Override
+            public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.draw(new RoundRectangle2D.Double(x, y, width - 1, height - 1, getRadius(), getRadius()));
+                g2d.dispose();
+            }
+
+            @Override
+            public Insets getBorderInsets(Component c) {
+                int value = getRadius() / 2;
+                return new Insets(value, value, value, value);
+            }
+
+            @Override
+            public boolean isBorderOpaque() {
+                return false;
+            }
 
         }
 
@@ -121,9 +162,10 @@ public class Main implements ActionListener {
             try {
                 String result = converter.visit(tree);
                 cOutputArea.setText(result);
+                errorArea.setText("...");
             }
             catch (Exception ex) {
-                cOutputArea.setText("its not PWN code");
+                errorArea.setText("its not PWN code");
             }
         }
     }
