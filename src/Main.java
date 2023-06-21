@@ -84,6 +84,7 @@ public class Main implements ActionListener {
             pwnInputArea.setLineWrap(true);
             pwnInputArea.setBorder(new RoundBorder(20));
             pwnInputArea.setWrapStyleWord(true);
+            pwnInputArea.setFont(new Font("Arial Black", Font.PLAIN, 18));
             add(pwnInputArea, gbc);
 
             gbc.gridx++;
@@ -96,6 +97,7 @@ public class Main implements ActionListener {
             scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             cOutputArea.setEditable(false);
             cOutputArea.setBorder(new RoundBorder(20));
+            cOutputArea.setFont(new Font("Arial Black", Font.PLAIN, 18));
             add(cOutputArea, gbc);
 
             gbc.gridx = 0;
@@ -111,6 +113,8 @@ public class Main implements ActionListener {
             scrollPane3 = new JScrollPane(errorArea);
             scrollPane3.setViewportView(errorArea);
             scrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+            errorArea.setEditable(false);
+            errorArea.setFont(new Font("Arial Black", Font.PLAIN, 16));
             add(errorArea, gbc);
 
             gbc.gridy++;
