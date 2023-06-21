@@ -22,7 +22,7 @@ public class Main implements ActionListener {
     JButton loadFileButton, transpileButton;
     JFrame mainFrame;
     JTextArea pwnInputArea, cOutputArea, errorArea;
-
+    JScrollPane scrollPane1, scrollPane2, scrollPane3;
 
     public static void main(String[] args) {
         new Main();
@@ -74,7 +74,13 @@ public class Main implements ActionListener {
             gbc.gridx = 0;
             gbc.gridy++;
             gbc.fill = GridBagConstraints.HORIZONTAL;
-            pwnInputArea = new JTextArea("Put your PWN code here",30, 40);
+            pwnInputArea = new JTextArea("Put your PWN code here");
+            pwnInputArea.setPreferredSize(new Dimension(500, 600));
+            pwnInputArea.setMinimumSize(new Dimension(500, 600));
+            pwnInputArea.setBounds(0, 0, 500, 600);
+            scrollPane1 = new JScrollPane(pwnInputArea);
+            scrollPane1.setViewportView(pwnInputArea);
+            scrollPane1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             pwnInputArea.setLineWrap(true);
             pwnInputArea.setBorder(new RoundBorder(20));
             pwnInputArea.setWrapStyleWord(true);
@@ -82,6 +88,12 @@ public class Main implements ActionListener {
 
             gbc.gridx++;
             cOutputArea= new JTextArea("C output will be shown here",30, 40);
+            cOutputArea.setPreferredSize(new Dimension(500, 600));
+            cOutputArea.setMinimumSize(new Dimension(500, 600));
+            cOutputArea.setBounds(0, 0, 500, 600);
+            scrollPane2 = new JScrollPane(cOutputArea);
+            scrollPane2.setViewportView(cOutputArea);
+            scrollPane2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             cOutputArea.setEditable(false);
             cOutputArea.setBorder(new RoundBorder(20));
             add(cOutputArea, gbc);
@@ -93,6 +105,12 @@ public class Main implements ActionListener {
 
             errorArea = new JTextArea("...",5, 40);
             errorArea.setBorder(new RoundBorder(20));
+            errorArea.setPreferredSize(new Dimension(500, 150));
+            errorArea.setMinimumSize(new Dimension(500, 150));
+            errorArea.setBounds(0, 0, 500, 150);
+            scrollPane3 = new JScrollPane(errorArea);
+            scrollPane3.setViewportView(errorArea);
+            scrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             add(errorArea, gbc);
 
             gbc.gridy++;
