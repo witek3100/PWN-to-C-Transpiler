@@ -12,13 +12,27 @@ Whole project is written in Java and based on antlr parser generator, gui was cr
 PWN language draw from Python and C, it has readability of the first one but takes some ideas straight from the second one.
 Example of code written in pwn:  
 ```
-j: int = 5;
-i: float = 6.0;
+func add(a: int, b: int) -> int {
+    c: int = a + b;
+    return c;
+}
 
-while ((i and j) or (j and i)) {
-    c: int = i + j * 2;
+a: string = "test";
+b: float = 777.123;
+
+arr: int[10];
+
+for(i: int in 0..10) {
+    arr[i] = add(i, 5);
+}
+
+j: int = 5;
+
+while(j >= 0) {
+    j--;
 }
 ```
+More examples as well as examples with errors to showcase the error handler are in the examples directory.
 ### Project structure
 <pre>
     src
@@ -36,5 +50,7 @@ while ((i and j) or (j and i)) {
      |     ├── PWNVisitor.java
      |     └── antlr-4.12.0-complete.jar    # antlr java archive
      ├── Main.java                          # gui
-     ├── PWNCoverter.java                   
+     ├── PWNConverter.java                  # the actual converter logic class
+     ├── PWNErrorListener.java              # custom syntax error handler
+     ├── Value.java                         # helper class used to evaluate expressions
 </pre>
