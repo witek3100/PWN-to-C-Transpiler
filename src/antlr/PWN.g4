@@ -28,7 +28,7 @@ jumpStatementType
     ;
 
 declaration
-    : ID COLON type ASSIGN expression SEMICOLON 
+    : ID COLON type ASSIGN (expression | arrayLiteral) SEMICOLON
     ;
 
 arrayDeclaration
@@ -80,7 +80,7 @@ iterable
     ;
 
 forStatement 
-    : FOR LPAR ID COLON type IN iterable RPAR LBRACE loopStatement* RBRACE
+    : FOR LPAR ID COLON normalType IN iterable RPAR LBRACE loopStatement* RBRACE
     ;
 
 functionDefinition
@@ -119,7 +119,6 @@ expression
     | expression (ADD | SUB) expression          #additiveExpression
     | expression (LT | GT | LE | GE) expression  #comparisonExpression
     | expression (EQ | NEQ) expression           #equalityExpression
-    | expression IN iterable                     #inExpression
     | expression AND expression                  #andExpression
     | expression OR expression                   #orExpression
     ;
@@ -129,7 +128,7 @@ variableValue
     ;
 
 value
-    : variableValue | literalValue | arrayLiteral | functionCall | ( LPAR value RPAR )
+    : variableValue | literalValue | functionCall | ( LPAR value RPAR )
     ;
 
 arrayLiteral
@@ -137,7 +136,7 @@ arrayLiteral
     ;
 
 literalValue
-    : INT | FLOAT | STRING | NULL | TRUE | FALSE
+    : INT | FLOAT | STRING | TRUE | FALSE
     ;
 
 
@@ -207,15 +206,11 @@ GE : '>=' ;
 
 LE : '<=' ;
 
-ASSEMBLY : 'asm' ;
-
 NOT : '!' ;
 
 OR : 'or' ;
 
 AND : 'and' ;
-
-NULL : 'null' ;
 
 FALSE : 'false' ;
 

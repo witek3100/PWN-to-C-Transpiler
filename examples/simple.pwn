@@ -1,6 +1,6 @@
 j: int = 5;
-i: float = 6.0;
+i: int = 6;
 
-while ((i and j) or (j and i)) {
+if (i > j or j > i) {
     c: int = i + j * 2;
 }

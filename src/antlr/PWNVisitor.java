@@ -188,13 +188,6 @@ public interface PWNVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAndExpression(PWNParser.AndExpressionContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code inExpression}
-	 * labeled alternative in {@link PWNParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitInExpression(PWNParser.InExpressionContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code parenthesizedExpression}
 	 * labeled alternative in {@link PWNParser#expression}.
 	 * @param ctx the parse tree

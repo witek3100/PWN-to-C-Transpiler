@@ -3,6 +3,9 @@ func add(a: int, b: int) -> int {
     return c;
 }
 
+a: string = "test";
+b: float = 777.123;
+
 arr: int[10];
 
 for(i: int in 0..10) {

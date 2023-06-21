@@ -304,18 +304,6 @@ public interface PWNListener extends ParseTreeListener {
 	 */
 	void exitAndExpression(PWNParser.AndExpressionContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code inExpression}
-	 * labeled alternative in {@link PWNParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterInExpression(PWNParser.InExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by the {@code inExpression}
-	 * labeled alternative in {@link PWNParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitInExpression(PWNParser.InExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by the {@code parenthesizedExpression}
 	 * labeled alternative in {@link PWNParser#expression}.
 	 * @param ctx the parse tree

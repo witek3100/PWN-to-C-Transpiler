@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class Main implements ActionListener {
 
@@ -48,7 +49,7 @@ public class Main implements ActionListener {
             mainFrame = new JFrame("Transpiler PWN to C");
             mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             mainFrame.setLayout(new BorderLayout());
-            mainFrame.setPreferredSize(new Dimension(1300, 900));
+            mainFrame.setPreferredSize(new Dimension(1300, 1000));
             mainFrame.add(new Gui());
             mainFrame.pack();
             mainFrame.setLocationRelativeTo(null);
@@ -75,33 +76,31 @@ public class Main implements ActionListener {
             gbc.gridy++;
             gbc.fill = GridBagConstraints.HORIZONTAL;
             pwnInputArea = new JTextArea("Put your PWN code here");
-            pwnInputArea.setPreferredSize(new Dimension(500, 3000));
-            pwnInputArea.setMinimumSize(new Dimension(500, 3000));
-            pwnInputArea.setBounds(0, 0, 500, 3000);
+            pwnInputArea.setMinimumSize(new Dimension(600, 3000));
+            pwnInputArea.setBounds(0, 0, 600, 3000);
             pwnInputArea.setLineWrap(true);
             pwnInputArea.setBorder(new RoundBorder(20));
             pwnInputArea.setWrapStyleWord(true);
-            pwnInputArea.setFont(new Font("Arial Black", Font.PLAIN, 15));
+            pwnInputArea.setFont(new Font("Consolas", Font.PLAIN, 14));
             scrollPane1 = new JScrollPane(pwnInputArea);
             scrollPane1.setViewportView(pwnInputArea);
-            scrollPane1.setPreferredSize(new Dimension(500, 600));
-            scrollPane1.setMinimumSize(new Dimension(500, 600));
-            scrollPane1.setBounds(0, 0, 500, 600);
+            scrollPane1.setPreferredSize(new Dimension(600, 600));
+            scrollPane1.setMinimumSize(new Dimension(600, 600));
+            scrollPane1.setBounds(0, 0, 600, 600);
             add(scrollPane1, gbc);
 
             gbc.gridx++;
             cOutputArea= new JTextArea("C output will be shown here");
-            cOutputArea.setPreferredSize(new Dimension(500, 3000));
-            cOutputArea.setMinimumSize(new Dimension(500, 3000));
-            cOutputArea.setBounds(0, 0, 500, 3000);
+            cOutputArea.setMinimumSize(new Dimension(600, 3000));
+            cOutputArea.setBounds(0, 0, 600, 3000);
             cOutputArea.setEditable(false);
             cOutputArea.setBorder(new RoundBorder(20));
-            cOutputArea.setFont(new Font("Arial Black", Font.PLAIN, 15));
+            cOutputArea.setFont(new Font("Consolas", Font.PLAIN, 14));
             scrollPane2 = new JScrollPane(cOutputArea);
             scrollPane2.setViewportView(cOutputArea);
-            scrollPane2.setPreferredSize(new Dimension(520, 600));
-            scrollPane2.setMinimumSize(new Dimension(520, 600));
-            scrollPane2.setBounds(0, 0, 520, 600);
+            scrollPane2.setPreferredSize(new Dimension(620, 600));
+            scrollPane2.setMinimumSize(new Dimension(620, 600));
+            scrollPane2.setBounds(0, 0, 620, 600);
             add(scrollPane2, gbc);
 
             gbc.gridx = 0;
@@ -109,16 +108,16 @@ public class Main implements ActionListener {
             gbc.fill = GridBagConstraints.NONE;
             gbc.gridwidth = 2;
 
-            errorArea = new JTextArea("...",5, 40);
+            errorArea = new JTextArea("Errors will be shown here",8, 40);
             errorArea.setBorder(new RoundBorder(20));
-            errorArea.setPreferredSize(new Dimension(500, 150));
-            errorArea.setMinimumSize(new Dimension(500, 150));
-            errorArea.setBounds(0, 0, 500, 150);
+            errorArea.setPreferredSize(new Dimension(800, 200));
+            errorArea.setMinimumSize(new Dimension(800, 200));
+            errorArea.setBounds(0, 0, 800, 200);
             scrollPane3 = new JScrollPane(errorArea);
             scrollPane3.setViewportView(errorArea);
             scrollPane3.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
             errorArea.setEditable(false);
-            errorArea.setFont(new Font("Arial Black", Font.PLAIN, 16));
+            errorArea.setFont(new Font("Consolas", Font.PLAIN, 12));
             add(errorArea, gbc);
 
             gbc.gridy++;
@@ -177,22 +176,31 @@ public class Main implements ActionListener {
             pwnInputArea.setCaretPosition(pwnInputArea.getDocument().getLength());
         }
         else if (e.getSource() == transpileButton) {
-            PWNParser parser = null;
+            PWNParser parser;
             try {
                 parser = getParser(pwnInputArea.getText());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+
             ParseTree tree = parser.program();
+            if (!PWNErrorListener.errors.isEmpty()) {
+                errorArea.setText(String.join("\n", PWNErrorListener.errors));
+                cOutputArea.setText("C output will be shown here");
+                PWNErrorListener.errors = new ArrayList<>();
+                return;
+            }
             PWNConverter converter = new PWNConverter();
-            try {
-                String result = converter.visit(tree);
-                cOutputArea.setText(result);
-                errorArea.setText("...");
+
+            String result = converter.visit(tree);
+            if (!converter.errors.isEmpty()) {
+                errorArea.setText(String.join("\n", converter.errors));
+                cOutputArea.setText("C output will be shown here");
+                return;
             }
-            catch (Exception ex) {
-                errorArea.setText("its not PWN code");
-            }
+
+            cOutputArea.setText(result);
+            errorArea.setText("Errors will be shown here");
         }
     }
 
@@ -200,6 +208,9 @@ public class Main implements ActionListener {
         CharStream input = CharStreams.fromString(pwnInput);
         PWNLexer lexer = new PWNLexer(input);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
-        return new PWNParser(tokens);
+        PWNParser parser = new PWNParser(tokens);
+        parser.removeErrorListeners();
+        parser.addErrorListener(new PWNErrorListener());
+        return parser;
     }
 }
