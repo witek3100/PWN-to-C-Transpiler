@@ -49,7 +49,7 @@
 |         FN          |                            'func'                            |
 |       RETURN        |                           'return'                           |
 |         ID          |                    [a-zA-Z_][a-zA-Z0-9_]*                    |
-|         INT         |       [0-9]+          \| '0x'[0-9a-fA-F]+ \| '0b'[01]+       |
+|         INT         |           '0x'[0-9a-fA-F]+ \| '0b'[01]+ \| [0-9]+            |
 |        FLOAT        |                       [0-9]+'.'[0-9]'                        |
 |        RANGE        |                       [0-9]+'..'[0-9]+                       |
 |       STRING        |                   UNTERMINATED_STRING '"'                    |
