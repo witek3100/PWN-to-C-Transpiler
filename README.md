@@ -1,15 +1,15 @@
 # PWN to C Transpiler
 ### About project
-The objective of this project was to develop a transpiler that translates code written in own projected PWN programming language into equivalent code in the widely recognized C. Whole thing wrapped in user friendly interface allowing to loading pwn and exporting c files quickly.  
+The objective of this project was to develop a transpiler which translates code written in our own programming language called PWN into equivalent code in the widely recognized C. Whole thing is wrapped in user friendly interface allowing to load .pwn files and translate them into C.  
 ### Run
-Clone project into desiered directory, if you have java installed on your machine just run:  
+Clone the project into desired directory, if you have java installed on your machine just run:  
 ```
 javac Main.java
 ```
 ### Technologies used
-Whole project is written in Java and based on antlr parser generator, gui was created in swing.  
+The whole project is written in Java and based on the ANTLR4 parser generator, the GUI was created in Swing.
 ### PWN programming language
-PWN language draw from Python and C, it has readability of the first one but takes some ideas straight from the second one.
+PWN language draws from Python and C, it has readability of the first one but takes some ideas straight from the second one.
 Example of code written in pwn:  
 ```
 func add(a: int, b: int) -> int {
@@ -32,7 +32,7 @@ while(j >= 0) {
     j--;
 }
 ```
-More examples as well as examples with errors to showcase the error handler are in the examples directory.
+More examples as well as examples with errors to showcase the error handler are available in the `examples` directory
 ### Project structure
 <pre>
     src
