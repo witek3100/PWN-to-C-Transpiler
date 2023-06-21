@@ -11,3 +11,6 @@ while (i < 5) {
     arr2[i] = add(arr[i], 5);
     i++;
 }
+
+hexInt: int = 0xab31fe;
+binInt: int = 0b1011010;
