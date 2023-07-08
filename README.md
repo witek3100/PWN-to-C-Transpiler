@@ -2,10 +2,25 @@
 ### About project
 The objective of this project was to develop a transpiler which translates code written in our own programming language called PWN into equivalent code in the widely recognized C. Whole thing is wrapped in user friendly interface allowing to load .pwn files and translate them into C.  
 ### Run
-Clone the project into desired directory, if you have java installed on your machine just run:  
+After cloning repo and installing java add antlr to classpath:
+
+Linux:
+```
+export CLASSPATH=".:#ŚCIEŻKA DO PROJEKTU#/src/antlr/antlr-4.2.2-complete.jar:$CLASSPATH"
+```
+Windows:
+```
+SET CLASSPATH=.;#ŚCIEŻKA DO PROJEKTU#/src/antlr/antlr4-complete.jar;%CLASSPATH%
+```
+Then, in src directory:
 ```
 javac Main.java
 ```
+and finally
+```
+java Main
+```
+    
 ### Technologies used
 The whole project is written in Java and based on the ANTLR4 parser generator, the GUI was created in Swing.
 ### PWN programming language
