@@ -6,11 +6,11 @@ After cloning repo and installing java add antlr to classpath:
 
 Linux:
 ```
-export CLASSPATH=".:#ŚCIEŻKA DO PROJEKTU#/src/antlr/antlr-4.2.2-complete.jar:$CLASSPATH"
+export CLASSPATH=".:# PATH TO PROJECT #/src/antlr/antlr-4.2.2-complete.jar:$CLASSPATH"
 ```
 Windows:
 ```
-SET CLASSPATH=.;#ŚCIEŻKA DO PROJEKTU#/src/antlr/antlr4-complete.jar;%CLASSPATH%
+SET CLASSPATH=.;# PATH TO PROJECT #/src/antlr/antlr4-complete.jar;%CLASSPATH%
 ```
 Then, in src directory:
 ```
